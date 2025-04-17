@@ -16,7 +16,6 @@ public class UserPojo{
 		this.email = email;
 	}
 
-
 	public UserPojo() {
 	}
 
