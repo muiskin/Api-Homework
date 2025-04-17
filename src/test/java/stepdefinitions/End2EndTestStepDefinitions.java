@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import pages.CLHomePage;
 import pages.CLSignUpPage;
 import pojos.UserPojo;
+import utilities.ConfigReader;
 import utilities.Driver;
 import utilities.ObjectMapperUtils;
 
@@ -23,7 +24,8 @@ public class End2EndTestStepDefinitions {
     private CLSignUpPage clSignUpPage;
     String firstname;
     String lastname;
-    public static String email;
+
+
     UserPojo expectedData;
     Response response;
 
@@ -40,10 +42,13 @@ public class End2EndTestStepDefinitions {
     @When("User enters firstname, lastname, email, password")
     public void user_enters_firstname_lastname_email_password() {
 
+
         Faker faker = new Faker();
         firstname = faker.name().firstName();
         lastname = faker.name().lastName();
-        email = faker.internet().emailAddress();
+        String email = faker.internet().emailAddress();
+
+        ConfigReader.setProperties("email",email);
 
         clSignUpPage = new CLSignUpPage();
         clSignUpPage.firstname.sendKeys(firstname);
@@ -70,7 +75,7 @@ public class End2EndTestStepDefinitions {
 
         Response response = given(spec).contentType(ContentType.JSON).get("{first}/{second}");
         response.prettyPrint();
-        response.then().statusCode(200).body("firstName", equalTo(firstname),"lastName",equalTo(lastname),"email",equalTo(email));
+        response.then().statusCode(200).body("firstName", equalTo(firstname),"lastName",equalTo(lastname),"email",equalTo(ConfigReader.getProperty("email")));
 
     }
 
@@ -84,7 +89,9 @@ public class End2EndTestStepDefinitions {
         Faker faker = new Faker();
         firstname = faker.name().firstName();
         lastname = faker.name().lastName();
-        email = faker.internet().emailAddress();
+        String email = faker.internet().emailAddress();
+
+        ConfigReader.setProperties("email",email);
 
         expectedData = new UserPojo(firstname,lastname,"Password.123",email);
         System.out.println("expectedData UPDATE = " + expectedData);
