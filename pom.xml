@@ -67,7 +67,6 @@
 
     </dependencies>
 
-
     <build>
         <plugins>
             <!-- The Surefire plugin is used to run tests in parallel with the specified settings. -->
